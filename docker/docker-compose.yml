@@ -9,7 +9,6 @@ services:
       - '8224:8224'
     networks:
       - axon-demo
-
 networks:
   axon-demo:
     driver: bridge
