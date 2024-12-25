@@ -2,7 +2,8 @@ package com.trungtin.bookservice.query.controller;
 
 import com.trungtin.bookservice.query.model.BookResponseModel;
 import com.trungtin.bookservice.query.queries.GetAllBookQuery;
-import com.trungtin.bookservice.query.queries.GetBookDetailQuery;
+import com.trungtin.commonservice.model.BookResponseCommonModel;
+import com.trungtin.commonservice.queries.GetBookDetailQuery;
 import com.trungtin.commonservice.services.KafkaService;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
@@ -27,9 +28,9 @@ public class BookQueryController {
         return queryGateway.query(getAllBookQuery, ResponseTypes.multipleInstancesOf(BookResponseModel.class)).join();
     }
     @GetMapping("{bookId}")
-    public BookResponseModel getBookDetail(@PathVariable("bookId") String bookId) {
+    public BookResponseCommonModel getBookDetail(@PathVariable("bookId") String bookId) {
         GetBookDetailQuery getBookDetailQuery = new GetBookDetailQuery(bookId);
-        return queryGateway.query(getBookDetailQuery, ResponseTypes.instanceOf(BookResponseModel.class)).join();
+        return queryGateway.query(getBookDetailQuery, ResponseTypes.instanceOf(BookResponseCommonModel.class)).join();
     }
 
     @PostMapping("/sendMessage")

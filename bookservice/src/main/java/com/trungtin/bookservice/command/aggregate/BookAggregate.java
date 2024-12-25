@@ -6,6 +6,10 @@ import com.trungtin.bookservice.command.command.UpdateBookCommand;
 import com.trungtin.bookservice.command.event.BookCreateEvent;
 import com.trungtin.bookservice.command.event.BookDeletedEvent;
 import com.trungtin.bookservice.command.event.BookUpdatedEvent;
+import com.trungtin.commonservice.command.RollbackStatusBookCommand;
+import com.trungtin.commonservice.command.UpdateStatusBookCommand;
+import com.trungtin.commonservice.event.BookRollbackStatusEvent;
+import com.trungtin.commonservice.event.BookUpdateStatusEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,6 +55,20 @@ public class BookAggregate {
         AggregateLifecycle.apply(bookDeletedEvent);
     }
 
+    @CommandHandler
+    public void handle(UpdateStatusBookCommand command) {
+        BookUpdateStatusEvent bookUpdateStatusEvent = new BookUpdateStatusEvent();
+        BeanUtils.copyProperties(command, bookUpdateStatusEvent);
+        AggregateLifecycle.apply(bookUpdateStatusEvent);
+    }
+
+    @CommandHandler
+    public void handle(RollbackStatusBookCommand command) {
+        BookRollbackStatusEvent bookRollbackStatusEvent = new BookRollbackStatusEvent();
+        BeanUtils.copyProperties(command, bookRollbackStatusEvent);
+        AggregateLifecycle.apply(bookRollbackStatusEvent);
+    }
+
     @EventSourcingHandler
     public void on(BookCreateEvent event) {
         this.id = event.getId();
@@ -70,5 +88,17 @@ public class BookAggregate {
     @EventSourcingHandler
     public void on(BookDeletedEvent event) {
         this.id = event.getId();
+    }
+
+    @EventSourcingHandler
+    public void on(BookUpdateStatusEvent event) {
+        this.id = event.getBookId();
+        this.isReady = event.getIsReady();
+    }
+
+    @EventSourcingHandler
+    public void on(BookRollbackStatusEvent event) {
+        this.id = event.getBookId();
+        this.isReady = event.getIsReady();
     }
 }

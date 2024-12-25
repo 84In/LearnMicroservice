@@ -1,8 +1,9 @@
 package com.trungtin.employeeservice.query.controller;
 
+import com.trungtin.commonservice.model.EmployeeResponseCommonModel;
 import com.trungtin.employeeservice.query.model.EmployeeResponseModel;
 import com.trungtin.employeeservice.query.queries.GetAllEmployeeQuery;
-import com.trungtin.employeeservice.query.queries.GetDetailEmployeeQuery;
+import com.trungtin.commonservice.queries.GetDetailEmployeeQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +42,7 @@ public class EmployeeQueryController {
         return  queryGateway.query(new GetAllEmployeeQuery(isDisciplined), ResponseTypes.multipleInstancesOf(EmployeeResponseModel.class)).join();
     }
     @GetMapping("/{employeeId}")
-    public EmployeeResponseModel getDetailEmployee(@PathVariable String employeeId){
-        return queryGateway.query(new GetDetailEmployeeQuery(employeeId), ResponseTypes.instanceOf(EmployeeResponseModel.class)).join();
+    public EmployeeResponseCommonModel getDetailEmployee(@PathVariable String employeeId){
+        return queryGateway.query(new GetDetailEmployeeQuery(employeeId), ResponseTypes.instanceOf(EmployeeResponseCommonModel.class)).join();
     }
 }

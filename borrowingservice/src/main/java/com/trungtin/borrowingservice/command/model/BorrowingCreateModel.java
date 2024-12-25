@@ -1,0 +1,17 @@
+package com.trungtin.borrowingservice.command.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class BorrowingCreateModel {
+
+    String bookId;
+    String employeeId;
+
+}

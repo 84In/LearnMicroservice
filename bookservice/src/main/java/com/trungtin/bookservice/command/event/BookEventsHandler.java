@@ -2,6 +2,8 @@ package com.trungtin.bookservice.command.event;
 
 import com.trungtin.bookservice.command.data.Book;
 import com.trungtin.bookservice.command.data.BookRepository;
+import com.trungtin.commonservice.event.BookRollbackStatusEvent;
+import com.trungtin.commonservice.event.BookUpdateStatusEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
@@ -44,5 +46,22 @@ public class BookEventsHandler {
         }catch (RuntimeException e){
             log.error(e.getMessage());
         }
+    }
+    @EventHandler
+    public void on(BookUpdateStatusEvent event) {
+        Optional<Book> oldBook = bookRepository.findById(event.getBookId());
+        oldBook.ifPresent(book -> {
+            book.setIsReady(event.getIsReady());
+            bookRepository.save(book);
+        });
+    }
+
+    @EventHandler
+    public void on(BookRollbackStatusEvent event) {
+        Optional<Book> oldBook = bookRepository.findById(event.getBookId());
+        oldBook.ifPresent(book -> {
+            book.setIsReady(event.getIsReady());
+            bookRepository.save(book);
+        });
     }
 }

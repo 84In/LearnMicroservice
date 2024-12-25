@@ -1,12 +1,12 @@
-package com.trungtin.bookservice.query.queries;
+package com.trungtin.commonservice.queries;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetBookDetailQuery {
+@NoArgsConstructor
+public class GetDetailEmployeeQuery {
     private String id;
 }
