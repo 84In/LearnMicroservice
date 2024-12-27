@@ -14,6 +14,13 @@ spring:
           uri: lb://bookservice
           predicates:
             - Path=/api/v1/books/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10 #trong 1s nap lai 10 token
+                redis-rate-limiter.burstCapacity: 20 #toi da 20 packega token
+                redis-rate-limiter.requestedTokens: 1 # so luong request tieu thu n token
+            - KeyAuthFilter
         - id: employeeservice
           uri: lb://employeeservice
           predicates:
@@ -38,9 +45,9 @@ spring:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: discoverserver
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discoverserver:8761/eureka/

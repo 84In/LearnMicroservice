@@ -22,22 +22,14 @@ public class EventConsumer {
     @Autowired
     private EmailService emailService;
 
-    @RetryableTopic(
-            attempts = "4", //3 topic retry + 1 topic DLQ (dead letter queue)
-            backoff = @Backoff(
-                    delay = 1000,
-                    multiplier = 2
-            ),
-            autoCreateTopics = "true",
-            dltStrategy = DltStrategy.FAIL_ON_ERROR,
-            include = {RetryException.class, RuntimeException.class}
-    )
+    @RetryableTopic(attempts = "4", // 3 topic retry + 1 topic DLQ (dead letter queue)
+            backoff = @Backoff(delay = 1000, multiplier = 2), autoCreateTopics = "true", dltStrategy = DltStrategy.FAIL_ON_ERROR, include = {
+                    RetryException.class, RuntimeException.class })
     @KafkaListener(topics = "test", containerFactory = "kafkaListenerContainerFactory")
     public void listen(String message) {
         log.info("Received message: " + message);
-        //processing message
-//        throw new RuntimeException("Error Test");
-
+        // processing message
+        throw new RuntimeException("Error Test");
     }
 
     @DltHandler
@@ -65,6 +57,6 @@ public class EventConsumer {
 
         Map<String, Object> placeholders = new HashMap<>();
         placeholders.put("name", "Trung Tin");
-        emailService.sendEmailWithTemplate(message,"Welcome to Christmas", "emailTemplate.ftl",placeholders, null);
+        emailService.sendEmailWithTemplate(message, "Welcome to Christmas", "emailTemplate.ftl", placeholders, null);
     }
 }
